@@ -12,16 +12,17 @@ import { useAuth } from "./AuthProvider";
 
 const graphqlUrl = () => {
   const projectRef = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_REF?.trim();
-  if (!projectRef) {
-    throw new Error("Missing NEXT_PUBLIC_SUPABASE_PROJECT_REF");
+  // Build/prerender must not hard-crash before Suri env is wired.
+  if (!projectRef || projectRef === "placeholder") {
+    return "https://placeholder.supabase.co/graphql/v1";
   }
   return `https://${projectRef}.supabase.co/graphql/v1`;
 };
 
 const anonKey = () => {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
-  if (!key) {
-    throw new Error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  if (!key || key.includes("placeholder")) {
+    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder.signature";
   }
   return key;
 };
@@ -35,9 +36,6 @@ export default function Provider({ children }: React.PropsWithChildren) {
       url: graphqlUrl(),
       exchanges: [
         cacheExchange({
-          // mediasCollection is accumulated in the picker UI (page cursor + local
-          // state). relayPagination kept a stale connection after REST uploads,
-          // so new images only appeared on full page reload.
           keys: {
             carts: (data) => `${data.product_id}`,
           },
