@@ -7,7 +7,19 @@ import {
 } from "@/lib/cache/constants";
 import { withStorefrontCache } from "@/lib/cache/storefront-cache";
 
+function dbReadyForBuild() {
+  const ref = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_REF?.trim() || "";
+  const url = process.env.DATABASE_URL?.trim() || "";
+  if (!ref || ref === "placeholder") return false;
+  if (!url || url.includes("placeholder") || url.includes("127.0.0.1")) {
+    return false;
+  }
+  return true;
+}
+
 export async function getPublishedProductSlugs() {
+  if (!dbReadyForBuild()) return [];
+
   return withStorefrontCache(
     "sf:sitemap:products",
     async () => {
@@ -30,6 +42,8 @@ export async function getPublishedProductSlugs() {
 }
 
 export async function getCollectionSlugs() {
+  if (!dbReadyForBuild()) return [];
+
   return withStorefrontCache(
     "sf:sitemap:collections",
     async () => {
