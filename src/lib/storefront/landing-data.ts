@@ -63,7 +63,7 @@ export async function getLandingPageDataCached(): Promise<LandingRouteQueryQuery
     "landing",
     () =>
       withStorefrontCache(
-        "sf:landing:v2",
+        "sf:landing:v3",
         async () => {
           const { data, error } = await getClient().query(
             LandingRouteQuery,
