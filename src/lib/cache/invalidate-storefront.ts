@@ -9,6 +9,7 @@ const REDIS_PREFIXES = [
   "sf:drafts",
   "sf:size:",
   "sf:collection:",
+  "sf:collections",
   "sf:product:",
   "sf:published:",
   "sf:runtime-bundle",
@@ -24,6 +25,7 @@ const REDIS_PREFIXES = [
 /** Narrow prefixes for category create/update/delete (avoids full KEYS scans). */
 const COLLECTION_REDIS_PREFIXES = [
   "sf:collection:",
+  "sf:collections",
   "sf:landing",
   "sf:products:",
 ] as const;
