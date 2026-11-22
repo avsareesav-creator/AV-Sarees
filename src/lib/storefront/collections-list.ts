@@ -25,7 +25,7 @@ export async function getAllCollectionsCached(): Promise<
   AllCollectionsQueryQuery["collectionsCollection"] | null
 > {
   return withStorefrontCache(
-    "sf:collections:all",
+    "sf:collections:all:v2",
     async () => {
       const { data, error } = await getClient().query(AllCollectionsQuery, {});
       if (error) {
